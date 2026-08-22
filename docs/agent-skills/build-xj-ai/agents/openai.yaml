@@ -1,0 +1,4 @@
+interface:
+  display_name: "Build xj-AI"
+  short_description: "Test, package, sign, and verify the xj-AI macOS app"
+  default_prompt: "Use $build-xj-ai to build and verify the xj-AI macOS app from this repository."

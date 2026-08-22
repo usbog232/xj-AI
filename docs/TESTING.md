@@ -34,6 +34,7 @@
 - OpenAI `/v1/audio/transcriptions` 与 whisper.cpp `/inference` 地址解析：通过；
 - 临时启动 whisper.cpp Server 后，xj-AI Swift 局域网客户端上传 WAV 并返回正确英文：通过；
 - 本地模型设置页实机显示 Apple / 本地 Whisper / 局域网三类引擎、5 个小模型及两类 LAN 协议：通过。
+- `docs/agent-skills/build-xj-ai` 通过 Skill Creator 官方结构校验；按 Skill 从环境检查、23 项测试、release 打包到资源、arm64 架构、Info.plist 与深度签名验证完整复跑：通过。
 
 ## 视觉对照
 

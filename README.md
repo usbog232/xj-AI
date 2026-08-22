@@ -130,6 +130,17 @@ env DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer \
   test --disable-sandbox
 ```
 
+### Agent 构建 Skill
+
+项目内提供了可复用的 Agent Skill：
+[`docs/agent-skills/build-xj-ai/SKILL.md`](docs/agent-skills/build-xj-ai/SKILL.md)。
+
+支持 Skill 的 Agent 可以安装该目录后调用 `$build-xj-ai`；也可以直接要求
+Agent 完整读取这个 `SKILL.md`，按照其中的测试、release 打包、资源检查、
+`Info.plist` 校验、签名验证和启动检查流程构建。Skill 以
+`script/build_and_run.sh` 为唯一 App 打包入口，避免只构建 SwiftPM 裸二进制
+却误报 App 已完成。
+
 ## 本地数据
 
 默认保存目录：
@@ -161,6 +172,7 @@ xj-AI/
 ├── Tests/            # 单元测试
 ├── Resources/        # App 图标、静态 whisper.cpp 组件与第三方许可
 ├── docs/             # 调研、设计、架构、测试与隐私说明
+│   └── agent-skills/ # 可复用的 Agent 构建 Skill
 ├── script/           # 统一构建/运行脚本
 ├── .codex/           # Codex Run 配置
 └── dist/xj-AI.app    # 已打包应用
