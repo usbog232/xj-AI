@@ -77,15 +77,60 @@ xj-AI 不会在启动时提前索要这些权限。
 
 点击主窗口右上角齿轮，进入 `AI Provider`。
 
-### 本机或局域网 llama.cpp
+### 推荐本机翻译模型：腾讯 Hy-MT2-1.8B（llama.cpp）
+
+xj-AI 的实时字幕翻译对**延迟**和**内存占用**敏感，推荐搭配腾讯混元专为翻译训练的小模型
+[Hy-MT2-1.8B-GGUF](https://huggingface.co/tencent/Hy-MT2-1.8B-GGUF)（Apache-2.0）：
+
+- 专为翻译训练的 1.8B 小模型，支持 **33 种语言**互译（含粤语、繁体中文），
+  1.8B 版实测超越微软、豆包等主流商业翻译 API；
+- Q8_0 量化版约 **1.91 GB**，Apple Silicon 上跑得飞快，不影响同时录音识别；
+- 官方原生支持 llama.cpp，与 xj-AI 的 llama.cpp Provider 直接对接。
+
+其他量化选择：Q4_K_M（1.13 GB，更快更省内存）/ Q6_K（1.47 GB）/ Q8_0（1.91 GB，质量最好）。
+想上更高质量可换 [Hy-MT2-7B-GGUF](https://huggingface.co/tencent/Hy-MT2-7B-GGUF)。
+
+**下载 Q8_0 模型**：
+
+```bash
+huggingface-cli download tencent/Hy-MT2-1.8B-GGUF \
+  Hy-MT2-1.8B-Q8_0.gguf --local-dir ~/models
+```
+
+**启动 llama.cpp 服务**（供 xj-AI 连接）：
+
+```bash
+llama-server -m ~/models/Hy-MT2-1.8B-Q8_0.gguf --port 8080
+```
+
+> 注意：该 GGUF 依赖 llama.cpp 的 STQ kernel（PR #22836），请使用较新版本的
+> llama.cpp 构建，旧版本可能无法加载。
+
+**推荐采样参数**（官方对 1.8B 的推荐值）：
+
+```json
+{ "temperature": 0.7, "top_p": 0.6, "top_k": 20, "repeat_penalty": 1.05 }
+```
+
+**翻译提示词模板**（模型只输出译文，可直接填入 xj-AI 翻译页的提示词栏）：
+
+```text
+将以下文本翻译为{目标语言}，注意只需要输出翻译后的结果，不要额外解释：
+
+{原文}
+```
+
+### 在 xj-AI 中连接
 
 1. 选择“添加 Provider → llama.cpp”；
 2. 本机服务填写 `http://127.0.0.1:8080/v1`；
 3. 局域网服务填写类似 `http://192.168.1.20:8080/v1`；
 4. API Key 可留空；点击“获取模型”或手动添加模型 ID；
-5. 在“翻译”页选择该 Provider 和模型。
+5. 在“翻译”页选择该 Provider 和模型，提示词填上面模板。
 
 服务端需要提供 OpenAI 兼容的 `/v1/models` 与 `/v1/chat/completions`。
+
+### Ollama
 
 ## 独立实时字幕
 
